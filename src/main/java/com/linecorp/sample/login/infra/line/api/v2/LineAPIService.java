@@ -92,7 +92,8 @@ public class LineAPIService {
                     jwt.getClaim("iat").asLong(),
                     jwt.getClaim("nonce").asString(),
                     jwt.getClaim("name").asString(),
-                    jwt.getClaim("picture").asString());
+                    jwt.getClaim("picture").asString(),
+                    jwt.getClaim("email").asString());
         } catch (JWTDecodeException e) {
             throw new RuntimeException(e);
         }
