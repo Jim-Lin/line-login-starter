@@ -14,6 +14,10 @@
     "LINECORP_PLATFORM_CHANNEL_CALLBACKURL": {
       "description": "Callback URL",
       "required": true
+    },
+    "LOGIN_STATE": {
+      "description": "State",
+      "required": true
     }
   }
 }

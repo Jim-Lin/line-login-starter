@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +37,16 @@ import com.linecorp.sample.login.infra.utils.CommonUtils;
 @Controller
 public class WebController {
 
-    private static final String LINE_WEB_LOGIN_STATE = "lineWebLoginState";
+//    private static final String LINE_WEB_LOGIN_STATE = "lineWebLoginState";
     static final String ACCESS_TOKEN = "accessToken";
     private static final Logger logger = Logger.getLogger(WebController.class);
     private static final String NONCE = "nonce";
 
     @Autowired
     private LineAPIService lineAPIService;
+
+    @Value("${login.state}")
+    private String loginState;
 
     /**
      * <p>LINE Login Button Page
@@ -60,7 +64,7 @@ public class WebController {
     public String goToAuthPage(HttpSession httpSession){
         final String state = CommonUtils.getToken();
         final String nonce = CommonUtils.getToken();
-        httpSession.setAttribute(LINE_WEB_LOGIN_STATE, state);
+//        httpSession.setAttribute(LINE_WEB_LOGIN_STATE, state);
         httpSession.setAttribute(NONCE, nonce);
         final String url = lineAPIService.getLineWebLoginUrl(state, nonce, Arrays.asList("openid", "profile", "email"));
         return "redirect:" + url;
@@ -93,11 +97,11 @@ public class WebController {
             return "redirect:/loginCancel";
         }
 
-        if (!state.equals(httpSession.getAttribute(LINE_WEB_LOGIN_STATE))){
+        if (!state.equals(loginState)){
             return "redirect:/sessionError";
         }
 
-        httpSession.removeAttribute(LINE_WEB_LOGIN_STATE);
+//        httpSession.removeAttribute(LINE_WEB_LOGIN_STATE);
         AccessToken token = lineAPIService.accessToken(code);
         if (logger.isDebugEnabled()) {
             logger.debug("scope : " + token.scope);
